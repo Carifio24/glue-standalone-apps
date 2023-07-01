@@ -84,45 +84,45 @@ jobs:
       shell: bash
       run: mv dist/glue.exe dist/"glue ${GITHUB_REF_NAME}.exe"
 
-    # Build signed DMG for direct distribution
-
-    - name: Remove start_glue
-      if: ${{ matrix.os == 'macos-11' }}
-      run: rm -rf dist/start_glue
-    - name: Codesign MacOS X application
-      if: ${{ matrix.os == 'macos-11' }}
-      run: codesign --entitlements entitlements.plist --force -s "${{ secrets.DEVELOPER_ID_APPLICATION}}" -v dist/"glue ${GITHUB_REF_NAME}.app" --deep --strict --options=runtime --timestamp
-    - name: Make DMG
-      if: ${{ matrix.os == 'macos-11' }}
-      run: hdiutil create -volname "Glue" -srcfolder dist -ov -format UDZO dist/"glue ${GITHUB_REF_NAME}.dmg"
-    - name: Notarize app
-      if: ${{ matrix.os == 'macos-11' }}
-      run: xcrun notarytool submit dist/"glue ${GITHUB_REF_NAME}.dmg" --apple-id ${{ secrets.NOTARIZATION_USERNAME }} --team-id ${{ secrets.TEAM_ID }} --password ${{ secrets.NOTARIZATION_PASSWORD }} --wait
-    - name: Staple notarization to dmg
-      if: ${{ matrix.os == 'macos-11' }}
-      run: xcrun stapler staple dist/"glue ${GITHUB_REF_NAME}.dmg"
-
-    # Build signed pkg for potential Mac App Store distribution
-
-    - name: Rename MacOS X application
-      if: ${{ matrix.os == 'macos-11' }}
-      run: mv dist/"glue ${GITHUB_REF_NAME}.app" dist/glueviz.app
-    - name: Build MacOS X installer for distribution
-      if: ${{ matrix.os == 'macos-11' }}
-      run: productbuild --component dist/glueviz.app /Applications/ dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg"
-    - name: Sign MacOS X installer for distribution
-      if: ${{ matrix.os == 'macos-11' }}
-      run: productsign --sign "${{ secrets.MAC_INSTALLER_DISTRIBUTION}}" dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg" dist/"glue ${GITHUB_REF_NAME}.pkg"
-    - name: Remove unsigned pkg
-      if: ${{ matrix.os == 'macos-11' }}
-      run: rm -rf dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg"
-
-    # For now validation fails because the entitlements file is missing the sandbox option - but we are leaving
-    # it out for now as WWT does not work correctly with it.
-    #- name: Validate pkg
-    #  if: ${{ matrix.os == 'macos-11' }}
-    #  run: xcrun altool --validate-app -f dist/"glue ${GITHUB_REF_NAME}.pkg" --type osx --username ${{ secrets.NOTARIZATION_USERNAME }} --password ${{ secrets.NOTARIZATION_PASSWORD }} --team-id ${{ secrets.TEAM_ID }}
-
+        #    # Build signed DMG for direct distribution
+        #
+        #    - name: Remove start_glue
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: rm -rf dist/start_glue
+        #    - name: Codesign MacOS X application
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: codesign --entitlements entitlements.plist --force -s "${{ secrets.DEVELOPER_ID_APPLICATION}}" -v dist/"glue ${GITHUB_REF_NAME}.app" --deep --strict --options=runtime --timestamp
+        #    - name: Make DMG
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: hdiutil create -volname "Glue" -srcfolder dist -ov -format UDZO dist/"glue ${GITHUB_REF_NAME}.dmg"
+        #    - name: Notarize app
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: xcrun notarytool submit dist/"glue ${GITHUB_REF_NAME}.dmg" --apple-id ${{ secrets.NOTARIZATION_USERNAME }} --team-id ${{ secrets.TEAM_ID }} --password ${{ secrets.NOTARIZATION_PASSWORD }} --wait
+        #    - name: Staple notarization to dmg
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: xcrun stapler staple dist/"glue ${GITHUB_REF_NAME}.dmg"
+        #
+        #    # Build signed pkg for potential Mac App Store distribution
+        #
+        #    - name: Rename MacOS X application
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: mv dist/"glue ${GITHUB_REF_NAME}.app" dist/glueviz.app
+        #    - name: Build MacOS X installer for distribution
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: productbuild --component dist/glueviz.app /Applications/ dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg"
+        #    - name: Sign MacOS X installer for distribution
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: productsign --sign "${{ secrets.MAC_INSTALLER_DISTRIBUTION}}" dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg" dist/"glue ${GITHUB_REF_NAME}.pkg"
+        #    - name: Remove unsigned pkg
+        #      if: ${{ matrix.os == 'macos-11' }}
+        #      run: rm -rf dist/"glue ${GITHUB_REF_NAME}_unsigned.pkg"
+        #
+        #    # For now validation fails because the entitlements file is missing the sandbox option - but we are leaving
+        #    # it out for now as WWT does not work correctly with it.
+        #    #- name: Validate pkg
+        #    #  if: ${{ matrix.os == 'macos-11' }}
+        #    #  run: xcrun altool --validate-app -f dist/"glue ${GITHUB_REF_NAME}.pkg" --type osx --username ${{ secrets.NOTARIZATION_USERNAME }} --password ${{ secrets.NOTARIZATION_PASSWORD }} --team-id ${{ secrets.TEAM_ID }}
+        #
     - name: Remove .app
       if: ${{ matrix.os == 'macos-11' }}
       run: rm -rf dist/"glueviz.app"
