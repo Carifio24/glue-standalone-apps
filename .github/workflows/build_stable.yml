@@ -135,4 +135,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: glue binaries
-        path: dist/
+        path: |
+        dist/"glue ${GITHUB_REF_NAME}.app"
+          dist/"glue ${GITHUB_REF_NAME}.exe"
