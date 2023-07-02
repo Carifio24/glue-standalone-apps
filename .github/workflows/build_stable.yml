@@ -136,5 +136,5 @@ jobs:
       with:
         name: glue binaries
         path: |
-        dist/"glue ${GITHUB_REF_NAME}.app"
+          dist/"glue ${GITHUB_REF_NAME}.app"
           dist/"glue ${GITHUB_REF_NAME}.exe"
