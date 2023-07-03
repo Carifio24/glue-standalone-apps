@@ -85,7 +85,7 @@ jobs:
         #      run: codesign --entitlements entitlements.plist --force -s "${{ secrets.DEVELOPER_ID_APPLICATION}}" -v dist/"glue ${GITHUB_REF_NAME}.app" --deep --strict --options=runtime --timestamp
     - name: Make DMG
       if: ${{ matrix.os == 'macos-11' }}
-      run: hdiutil create -volname "Glue" -srcfolder dist -ov -format UDZO dist/"glue ${GITHUB_REF_NAME}.dmg"
+      run: hdiutil create -volname "Glue" -srcfolder dist -ov -format UDZO dist/glue.dmg
         #    - name: Notarize app
         #      if: ${{ matrix.os == 'macos-11' }}
         #      run: xcrun notarytool submit dist/"glue ${GITHUB_REF_NAME}.dmg" --apple-id ${{ secrets.NOTARIZATION_USERNAME }} --team-id ${{ secrets.TEAM_ID }} --password ${{ secrets.NOTARIZATION_PASSWORD }} --wait
@@ -127,5 +127,5 @@ jobs:
       with:
         name: glue binaries
         path: |
-          dist/glue.app
+          dist/glue.dmg
           dist/glue.exe
