@@ -1,7 +1,7 @@
 ipykernel<6  # Install old version of ipykernel to avoid terminal issues
 glue-core
 glue-vispy-viewers==1.0.7
-git+https://github.com/Carifio24/glue-wwt.git@wwt-settings
+git+https://github.com/Carifio24/glue-wwt.git@wwt-settings-no-pywwt-pin
 glue-plotly==0.4.0
 pvextractor
 git+https://github.com/WorldWideTelescope/pywwt.git
